@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 from kostka import Kostka 
-from lod import Lod, Stihac
+from lod import Lod, Stihac, Korveta
 
 class Sektor:
     """
@@ -25,6 +25,8 @@ class Sektor:
     def _vypis_lod(self, lod):
         print(lod)
         print(f'Trup: {lod.graficky_trup()}')
+        if isinstance(lod, Stihac):
+            print(f'Energie: {lod.graficka_energie()}')
 
     def _vykresli(self):
         self._vycisti()
@@ -74,10 +76,11 @@ if __name__ == '__main__':
     clun = Lod("Gumotex", 140, 20, 30, k)
     l = Lod("Yachta", kostka=k, trup=80, utok=60, stit=70)
     fighter = Stihac("Killer", 90, 50, 60, k, 30, 90)
+    corv = Korveta("Korveta", 130, 70, 70, k)
     
     orion = Sektor(lodicka, fighter, k, "Orion")
     # dodelat aby se do dalsiho sektoru propsala jen ta ktera prezila minuly
     gamma = Sektor(lodicka, l, k, "Gamma")
 
     orion.souboj()
-    gamma.souboj()
+    # gamma.souboj()
