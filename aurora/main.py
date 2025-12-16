@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 import csv
 import argparse
 from dataclasses import dataclass
@@ -59,7 +61,7 @@ class AuroraApp:
         print("Loading and filtering data...")
         rows = self.processor.filter_rows(self.criteria)
 
-
+        
 
 def parse_args():
     p = argparse.ArgumentParser(description="Add description.")
@@ -92,6 +94,7 @@ def main():
     parser = parse_args()
     args = parser.parse_args()
     app = AuroraApp(args)
+    #print(app.args)
     app.run()
 
 if __name__ == '__main__':
