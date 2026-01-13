@@ -2,9 +2,12 @@
 
 import csv
 import argparse
+from datetime import datetime
 from dataclasses import dataclass
 from typing import Optional, List, Iterable, Dict, Any
 
+DATE_FMT = '%Y-%m-%d'
+TS_FMT = '%Y-%m-%d %H:%M:%S'
 
 @dataclass
 class FilterCriteria:
@@ -19,7 +22,23 @@ class FilterCriteria:
     min_money: Optional[List[str]] = None
     channel_darknet_only: bool = False
 
+    @classmethod
+    def from_args(cls, args: argparse.Namespace) -> "FilterCriteria":
+        def split_opt(val: Optional[str]) -> Optional[List[str]]:
+            if val is None:
+                return None
+            return [x.strip().upper() for x in val.split(',') if x.strip()]
+        
+        def parse_date(val: Optional[str]) -> Optional[datetime]:
+            if not val:
+                return None
+            return datetime.striptime(val, DATE_FMT)
 
+        return cls(
+            #zde jsme skoncili
+            country=split_opt(args.country)
+            #...
+        )
 
 
 class DataRepository:
