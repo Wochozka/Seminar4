@@ -10,7 +10,14 @@ from typing import Optional, List, Iterable, Dict, Any
 class FilterCriteria:
     country: Optional[List[str]] = None
     status: Optional[List[str]] = None
-    #...
+    risk_level: Optional[List[str]] = None
+    triage: Optional[List[str]] = None
+    from_date: Optional[List[str]] = None
+    to_date: Optional[List[str]] = None
+    min_threat: Optional[List[str]] = None
+    max_threat: Optional[List[str]] = None
+    min_money: Optional[List[str]] = None
+    channel_darknet_only: bool = False
 
 
 
@@ -35,6 +42,21 @@ class DataProcessor:
             if criteria.match(row):
                 result.append(row)
         return result
+    
+    def sort_rows(self, rows, spec):
+        if not spec:
+            return rows
+
+        def sort_key(row: Dict[str, Any]):
+            values = []
+            for col in spec.columns:
+                val = row.get(col)
+                try:
+                    values.append(float(val))
+                except (TypeError, ValueError):
+                    values.append(val)
+            return tuple(values)
+        #vratit srovnany radek
 
     def write_csv(self, rows: List[Dict[str, Any]], output_path):
         if not rows:
@@ -46,6 +68,27 @@ class DataProcessor:
             writer.writeheader()
             for row in rows:
                 writer.writerow(row)
+    
+    def sumarize(self, rows: List[Dict[str, Any]]):
+        total = len(rows)
+        print(f'Total rows: {total}')
+        if total == 0:
+            return
+        
+        # agregace podle risk_level
+        by_risk = {}
+        for r in rows:
+            rl = r.get('target_risk_level', 'UNKNOWN')
+            by_risk[rl] = by_risk.get(rl, 0) + 1
+        print('By risk level:')
+        #vratit srovnany risk_level
+        #print(f' {rl}: {count}') 
+
+        #prumerne threat skore
+        vals = [int(r.get('threat_score_overall', "0")) for r in rows]
+        avg_threat = sum(vals) / len(vals)
+        print(f'Average threat_score_overall: {avg_threat:.2f}')
+
 
 class AuroraApp:
     def __init__(self, args: argparse.Namespace):
