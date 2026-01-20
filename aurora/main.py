@@ -42,7 +42,7 @@ class FilterCriteria:
             from_date = split_opt(args.from_date),
             to_date = split_opt(args.to_date),
             min_threat = split_opt(args.min_threat),
-            max_threat = split_opt(args.max.threat),
+            max_threat = split_opt(args.max_threat),
             min_money = split_opt(args.min_money),
             channel_darknet_only = split_opt(args.channel_darknet)
         )
