@@ -46,25 +46,25 @@ class FilterCriteria:
             to_date = split_opt(args.to_date),
             min_threat = split_opt(args.min_threat),
             max_threat = split_opt(args.max_threat),
-            min_money = split_opt(args.min_money),
+            min_money = args.min_money,
             channel_darknet_only = args.channel_darknet
         )
     
     def match(self, row: Dict[str, str]) -> bool:
         #zeme
-        if self.country and row.get("country", "").upper not in self.country:
+        if self.country and row.get("country", "").upper() not in self.country:
             return False
 
         #status
-        if self.status and row.get("status", "").upper not in self.status:
+        if self.status and row.get("status", "").upper() not in self.status:
             return False
         
         #risk_level
-        if self.risk_level and row.get("target_risk_level", "").upper not in self.risk_level:
+        if self.risk_level and row.get("target_risk_level", "").upper() not in self.risk_level:
             return False
         
         #triage
-        if self.triage and row.get("triage", "").upper not in self.triage:
+        if self.triage and row.get("triage", "").upper() not in self.triage:
             return False
 
         #time frame
@@ -211,8 +211,8 @@ class AuroraApp:
 def parse_args():
     p = argparse.ArgumentParser(description=__doc__)
 
-    p.add_argument('--input', required=True, help="Path to input CSV file")
-    p.add_argument('--output', required=True, help="Path to output CSV file")
+    p.add_argument('-i', '--input', required=True, help="Path to input CSV file")
+    p.add_argument('-o', '--output', required=True, help="Path to output CSV file")
 
     p.add_argument('--country', help="Comma separated list of countries, e.g. CZ,DE")
     p.add_argument('--risk-level', help="Comma separated list of risk leveld, e.g. HIGH,CRITICAL")
